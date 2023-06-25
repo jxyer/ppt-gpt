@@ -50,7 +50,9 @@
         </template>
       </Dropdown>
     </div>
-
+    <div class="center" style="margin-top: 10px;">
+      {{ topic }}
+    </div>
     <div class="right">
       <Tooltip :mouseLeaveDelay="0" title="导出">
         <div class="menu-item" @click="setDialogForExport('pptx')">
@@ -84,7 +86,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '@/store'
+import { useMainStore, usePPTStore } from '@/store'
 import useScreening from '@/hooks/useScreening'
 import useSlideHandler from '@/hooks/useSlideHandler'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
@@ -101,6 +103,7 @@ import {
 } from 'ant-design-vue'
 const MenuItem = Menu.Item
 
+const pptStore = usePPTStore()
 const mainStore = useMainStore()
 const { gridLineSize, showRuler, showSelectPanel } = storeToRefs(mainStore)
 
@@ -110,6 +113,9 @@ const { redo, undo } = useHistorySnapshot()
 const { importSpecificFile, importPPTXFile, exporting } = useImport()
 
 const setDialogForExport = mainStore.setDialogForExport
+
+
+const topic = pptStore.topic
 
 const toggleGridLines = () => {
   mainStore.setGridLineSize(gridLineSize.value ? 0 : 50)

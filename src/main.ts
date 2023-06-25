@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import './registerServiceWorker'
+import Antd from 'ant-design-vue/es'
+import 'ant-design-vue/dist/antd.css'
+
 
 import '@icon-park/vue-next/styles/index.css'
 import 'prosemirror-view/style/prosemirror.css'
@@ -15,10 +18,12 @@ import '@/assets/styles/font.scss'
 import Icon from '@/plugins/icon'
 import Directive from '@/plugins/directive'
 
+
 const app = createApp(App)
 
 app.use(Icon)
 app.use(Directive)
 
 app.use(createPinia())
+app.use(Antd)
 app.mount('#app')

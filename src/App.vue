@@ -1,23 +1,31 @@
 <template>
-  <Screen v-if="screening" />
-  <Editor v-else-if="_isPC" />
-  <Mobile v-else />
+  <div id="app">
+    <Init v-if="!initFinished" @handleInitFinished="handleInitFinished"></Init>
+    <Screen v-if="initFinished && screening" />
+    <Editor v-else-if="initFinished && _isPC" />
+    <Mobile v-else />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useScreenStore, useMainStore, useSnapshotStore } from '@/store'
+import { useScreenStore, useMainStore, useSnapshotStore, usePPTStore } from '@/store'
 import { LOCALSTORAGE_KEY_DISCARDED_DB } from '@/configs/storage'
 import { deleteDiscardedDB } from '@/utils/database'
 import { isPC } from './utils/common'
 
+import Init from './views/Init/index.vue'
 import Editor from './views/Editor/index.vue'
 import Screen from './views/Screen/index.vue'
 import Mobile from './views/Mobile/index.vue'
 
+// 是否初始化完成
+const initFinished = ref<boolean>(false)
+
 const _isPC = isPC()
 
+const pptStore = usePPTStore()
 const mainStore = useMainStore()
 const snapshotStore = useSnapshotStore()
 const { databaseId } = storeToRefs(mainStore)
@@ -43,6 +51,11 @@ window.addEventListener('unload', () => {
   const newDiscardedDB = JSON.stringify(discardedDBList)
   localStorage.setItem(LOCALSTORAGE_KEY_DISCARDED_DB, newDiscardedDB)
 })
+
+function handleInitFinished(topic: string) {
+  pptStore.setTopic(topic)
+  initFinished.value = true
+}
 </script>
 
 <style lang="scss">
