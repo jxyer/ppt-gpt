@@ -145,6 +145,7 @@ export default () => {
             else if (el.type === 'image') {
               slide.elements.push({
                 type: 'image',
+                imageType: 'image',
                 id: nanoid(10),
                 src: el.src,
                 width: el.width,

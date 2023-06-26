@@ -162,6 +162,10 @@ export const useSlidesStore = defineStore('slides', {
       const newEls = currentSlideEls.filter(item => !elementIdList.includes(item.id))
       this.slides[this.slideIndex].elements = newEls
     },
+
+    clearElement() {
+      this.slides[this.slideIndex].elements = []
+    },
   
     updateElement(data: UpdateElementData) {
       const { id, props } = data

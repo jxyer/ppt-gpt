@@ -4,7 +4,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import Antd from 'ant-design-vue/es'
 import 'ant-design-vue/dist/antd.css'
-
+import axios from 'axios'
 
 import '@icon-park/vue-next/styles/index.css'
 import 'prosemirror-view/style/prosemirror.css'
@@ -21,6 +21,7 @@ import Directive from '@/plugins/directive'
 
 const app = createApp(App)
 
+app.provide('$axios', axios)
 app.use(Icon)
 app.use(Directive)
 

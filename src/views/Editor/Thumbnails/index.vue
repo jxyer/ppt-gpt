@@ -47,17 +47,21 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useMainStore, useSlidesStore, useKeyboardStore } from '@/store'
+import useOrderElement from '@/hooks/useOrderElement'
+import { useMainStore, useSlidesStore, useKeyboardStore, usePPTStore } from '@/store'
 import { fillDigit } from '@/utils/common'
 import { ContextmenuItem } from '@/components/Contextmenu/types'
 import useSlideHandler from '@/hooks/useSlideHandler'
 import useScreening from '@/hooks/useScreening'
 import useLoadSlides from '@/hooks/useLoadSlides'
+import { fetchPPTInfo } from '@/api/ppt'
+import { ElementOrderCommands } from '@/types/edit'
 
 import ThumbnailSlide from '@/views/components/ThumbnailSlide/index.vue'
 import LayoutPool from './LayoutPool.vue'
 import Draggable from 'vuedraggable'
 import { Popover } from 'ant-design-vue'
+import { PPTElement } from '@/types/slides'
 
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
@@ -231,6 +235,26 @@ const contextmenusThumbnailItem = (): ContextmenuItem[] => {
     },
   ]
 }
+
+const pptStore = usePPTStore()
+// 生成Slides
+async function generateSlides() {
+  const resp = await fetchPPTInfo({ topic: pptStore.topic })
+  const { orderElement } = useOrderElement()
+  slidesStore.clearElement()
+  const elements = resp as unknown as PPTElement[]
+  slidesStore.addElement(elements)
+  
+  elements.forEach(element => {
+    if (element.type === 'image' && element.imageType === 'background') {
+      orderElement(element, ElementOrderCommands.BOTTOM)
+    }
+  })
+}
+
+generateSlides()
+
+
 </script>
 
 <style lang="scss" scoped>
