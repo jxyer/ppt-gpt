@@ -252,7 +252,6 @@ export interface ImageColorElementMask {
  * shadow?: 阴影
  */
 export interface PPTImageElement extends PPTBaseElement {
-  imageType: string
   type: 'image'
   fixedRatio: boolean
   src: string

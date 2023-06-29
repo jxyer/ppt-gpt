@@ -35,8 +35,8 @@ export const slides: Slide[] = [
       {
         type: 'text',
         id: 'idn7Mx',
-        left: 355,
-        top: 65.25,
+        left: 50,
+        top: 50,
         width: 585,
         height: 188,
         lineHeight: 1.2,

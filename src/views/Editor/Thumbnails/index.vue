@@ -54,7 +54,7 @@ import { ContextmenuItem } from '@/components/Contextmenu/types'
 import useSlideHandler from '@/hooks/useSlideHandler'
 import useScreening from '@/hooks/useScreening'
 import useLoadSlides from '@/hooks/useLoadSlides'
-import { fetchPPTInfo } from '@/api/ppt'
+import { initWebSocket, send } from '@/ws'
 import { ElementOrderCommands } from '@/types/edit'
 
 import ThumbnailSlide from '@/views/components/ThumbnailSlide/index.vue'
@@ -238,18 +238,21 @@ const contextmenusThumbnailItem = (): ContextmenuItem[] => {
 
 const pptStore = usePPTStore()
 // 生成Slides
-async function generateSlides() {
-  const resp = await fetchPPTInfo({ topic: pptStore.topic })
-  const { orderElement } = useOrderElement()
-  slidesStore.clearElement()
-  const elements = resp as unknown as PPTElement[]
-  slidesStore.addElement(elements)
-  
-  elements.forEach(element => {
-    if (element.type === 'image' && element.imageType === 'background') {
-      orderElement(element, ElementOrderCommands.BOTTOM)
-    }
+function generateSlides() {
+  initWebSocket((resp: any) => {
+    // slidesStore.clearElement()
+    let id = 0
+    slidesStore.addSlide({
+      id: '' + id++,
+      elements: resp.elements,
+      background: { type: 'solid', color: resp.background, }
+    })
+    // slidesStore.updateSlideIndex(slidesStore.slideIndex + 1)
   })
+  send(pptStore.topic)
+  // const { orderElement } = useOrderElement()
+
+
 }
 
 generateSlides()

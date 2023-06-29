@@ -66,7 +66,6 @@ export default () => {
 
       createElement({
         type: 'image',
-        imageType: 'image',
         id: nanoid(10),
         src,
         width,
